@@ -117,8 +117,11 @@ public class Server {
         }
     }
 
-//        public void addHandler(String get, String s, Handler handler) {
-//if (!handler.co)
-//    }
+    protected void addHandler(String method, String path, Handler handler) {
+        if (!handlers.containsKey(method)) {
+            handlers.put(method, new HashMap<>());
+        }
+        handlers.get(method).put(path, handler);
+    }
 }
 

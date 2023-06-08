@@ -16,26 +16,52 @@ public class Main {
         int port = 9999;
         Server server = new Server(port, poolSizeThreads);
 
+        // код инициализации сервера (из вашего предыдущего ДЗ)
 
+        // добавление хендлеров (обработчиков)
+        server.addHandler("GET", "/messages", new Handler() {
+            @Override
+            public void publish(LogRecord record) {
 
-                // код инициализации сервера (из вашего предыдущего ДЗ)
-
-                // добавление хендлеров (обработчиков)
-//                server.addHandler("GET", "/messages", new Handler() {
-//
-//
-//                    public void handle(Request request, BufferedOutputStream responseStream) {
-//                        // TODO: handlers code
-//                    }
-//                });
-//                server.addHandler("POST", "/messages", new Handler() {
-//                    public void handle(Request request, BufferedOutputStream responseStream) {
-//                        // TODO: handlers code
-//                    }
-//                });
-
-        //  server.listen(9999);
-        server.start();
             }
-        }
+
+            @Override
+            public void flush() {
+
+            }
+
+            @Override
+            public void close() throws SecurityException {
+
+            }
+
+            public void handle(Request request, BufferedOutputStream responseStream) {
+                // TODO: handlers code
+            }
+        });
+        server.addHandler("POST", "/messages", new Handler() {
+            @Override
+            public void publish(LogRecord record) {
+
+            }
+
+            @Override
+            public void flush() {
+
+            }
+
+            @Override
+            public void close() throws SecurityException {
+
+            }
+
+            public void handle(Request request, BufferedOutputStream responseStream) {
+                // TODO: handlers code
+            }
+        });
+
+
+        server.start();
+    }
+}
 
