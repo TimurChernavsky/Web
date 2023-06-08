@@ -7,18 +7,22 @@ import java.net.Socket;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.Executor;
+
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+
+import java.util.logging.Handler;
 
 public class Server {
     private int socketInt;
     private final List validPaths = List.of("/index.html", "/spring.svg", "/spring.png", "/resources.html", "/styles.css", "/app.js", "/links.html", "/forms.html", "/classic.html", "/events.html", "/events.js");
-    private BufferedOutputStream out;
+
     private String path;
     private ExecutorService executor;
+    private HashMap<String, Map<String, Handler>> handlers;
 
     public Server(int socketInt, int poolSizeThreads) {
         this.socketInt = socketInt;
@@ -27,7 +31,7 @@ public class Server {
 
     public void proceedConnection(Socket socket) throws IOException {
         final var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        out = new BufferedOutputStream(socket.getOutputStream());
+        BufferedOutputStream out = new BufferedOutputStream(socket.getOutputStream());
 
         // read only request line for simplicity
         // must be in form GET /path HTTP/1.1
@@ -49,6 +53,7 @@ public class Server {
                             "\r\n"
             ).getBytes());
             out.flush();
+            defaultHandler(out, path);
         }
     }
 
@@ -99,10 +104,8 @@ public class Server {
                             throw new RuntimeException(e);
                         }
                     });
-                    defaultHandler(out, path);
-
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    System.out.println("Произошла ошибка типа IOException, это значит что произошло какое-либо исключение ввода-вывода");
                 } finally {
                     executor.shutdown();
                 }
@@ -112,5 +115,9 @@ public class Server {
             throw new RuntimeException(e);
         }
     }
+
+//        public void addHandler(String get, String s, Handler handler) {
+//if (!handler.co)
+//    }
 }
 
