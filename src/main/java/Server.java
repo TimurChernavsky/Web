@@ -53,6 +53,7 @@ public class Server {
                             "\r\n"
             ).getBytes());
             out.flush();
+        } else {
             defaultHandler(out, path);
         }
     }
