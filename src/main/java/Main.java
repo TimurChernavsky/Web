@@ -1,14 +1,5 @@
-
-import com.sun.net.httpserver.Request;
-
-import java.io.*;
-import java.net.ServerSocket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.logging.Handler;
-import java.util.logging.LogRecord;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
@@ -20,46 +11,15 @@ public class Main {
 
         // добавление хендлеров (обработчиков)
         server.addHandler("GET", "/messages", new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-
-            }
-
-            @Override
-            public void flush() {
-
-            }
-
-            @Override
-            public void close() throws SecurityException {
-
-            }
-
             public void handle(Request request, BufferedOutputStream responseStream) {
                 // TODO: handlers code
             }
         });
         server.addHandler("POST", "/messages", new Handler() {
-            @Override
-            public void publish(LogRecord record) {
-
-            }
-
-            @Override
-            public void flush() {
-
-            }
-
-            @Override
-            public void close() throws SecurityException {
-
-            }
-
             public void handle(Request request, BufferedOutputStream responseStream) {
                 // TODO: handlers code
             }
         });
-
 
         server.start();
     }
