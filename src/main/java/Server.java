@@ -56,6 +56,16 @@ public class Server {
         } else {
             defaultHandler(out, path);
         }
+  if (request == null || !handlers.containsKey(request.getMethod())) {
+                responseWithoutContent(out, "404", "Not found");
+            }
+
+            Map<String, Handler> handlerMap = handlers.get(request.getMethod());
+            String requestPath = request.getPath();
+            if (handlerMap.containsKey(requestPath)) {
+                Handler handler = handlerMap.get(requestPath);
+                handler.handle(request, out);
+    
     }
 
     public void defaultHandler(BufferedOutputStream out, String path) throws IOException {
