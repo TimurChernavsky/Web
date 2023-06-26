@@ -134,7 +134,15 @@ public class Server {
         handlers.get(method).put(path, handler);
     }
 
-
+ protected void responseWithoutContent(BufferedOutputStream out, String responseCode, String responseStatus) throws IOException {
+        out.write((
+                "HTTP/1.1 " + responseCode + " " + responseStatus + "\r\n" +
+                        "Content-Length: 0\r\n" +
+                        "Connection: close\r\n" +
+                        "\r\n"
+        ).getBytes());
+        out.flush();
+    }
 
 }
 
