@@ -10,16 +10,45 @@ public class Main {
         // код инициализации сервера (из вашего предыдущего ДЗ)
 
         // добавление хендлеров (обработчиков)
-        server.addHandler("GET", "/messages", new Handler() {
-            public void handle(Request request, BufferedOutputStream responseStream) {
-                // TODO: handlers code
+ Handler handler = new Handler() {
+            @Override
+            public void handle(Request request, BufferedOutputStream out) {
+                try {
+                    if (request.getPath().equals("/classic.html")) {
+                        final var template = Files.readString(request.getFilePath());
+                        final var content = template.replace(
+                                "{time}",
+                                LocalDateTime.now().toString()
+                        ).getBytes();
+                        out.write((
+                                "HTTP/1.1 200 OK\r\n" +
+                                        "Content-Type: " + request.getMimeType() + "\r\n" +
+                                        "Content-Length: " + content.length + "\r\n" +
+                                        "Connection: close\r\n" +
+                                        "\r\n"
+                        ).getBytes());
+                        out.write(content);
+                        out.flush();
+                        return;
+                    }
+
+                    out.write((
+                            "HTTP/1.1 200 OK\r\n" +
+                                    "Content-Type: " + request.getMimeType() + "\r\n" +
+                                    "Content-Length: " + request.getLenght() + "\r\n" +
+                                    "Connection: close\r\n" +
+                                    "\r\n"
+                    ).getBytes());
+                    Files.copy(request.getFilePath(), out);
+                    out.flush();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
-        });
-        server.addHandler("POST", "/messages", new Handler() {
-            public void handle(Request request, BufferedOutputStream responseStream) {
-                // TODO: handlers code
-            }
-        });
+        };
+
+        server.addHandler("GET", "/index.html", handler);
+        server.addHandler("GET", "/classic.html", handler);
 
         server.start();
     }
